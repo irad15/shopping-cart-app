@@ -23,6 +23,9 @@
   font-weight: 600;
   color: #4a90e2;
   transition: background 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-actions a:hover {

@@ -45,11 +45,13 @@ export class CartComponent implements OnInit {
       next: (response) => {
         this.removingItem[productId] = false;
         if (response.success) {
+          // Find the cart item in the current cartItems array based on productId
           const item = this.cartItems.find(i => i.id === productId);
           if (item) {
             item.quantity -= 1;
             if (item.quantity <= 0) {
-              this.cartItems = this.cartItems.filter(i => i.id !== productId);
+              // Remove the item from cartItems if its quantity is zero or less
+              this.cartItems = this.cartItems.filter(item => item.id !== productId);
             }
           }
         }
@@ -62,7 +64,11 @@ export class CartComponent implements OnInit {
   }
 
   getTotalPrice(): number {
-    return this.cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    let total = 0;
+    for (const item of this.cartItems) {
+      total += item.price * item.quantity;
+    }
+    return total;
   }
 }
 

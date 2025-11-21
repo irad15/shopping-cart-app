@@ -22,10 +22,19 @@ export class CartService {
   }
 
   updateCart(cart: Cart): Observable<{ success: boolean }> {
-    return this.http.post<{ success: boolean }>(`${this.apiUrl}/cart`, { cart }, { headers: this.authService.getAuthHeaders() });
+    const url = `${this.apiUrl}/cart`;
+    const body = { cart };
+    const headers = this.authService.getAuthHeaders();
+    return this.http.post<{ success: boolean }>(url, body, { headers });
   }
 
-  addToCart(productId: number, title: string, price: number, image: string, stock: number): Observable<{ success: boolean; error?: string }> {
+  addToCart(
+    productId: number,
+    title: string,
+    price: number,
+    image: string,
+    stock: number
+  ): Observable<{ success: boolean; error?: string }> {
     return this.getCart().pipe(
       switchMap((cart) => {
         const item = cart.items.find(i => i.id === productId);

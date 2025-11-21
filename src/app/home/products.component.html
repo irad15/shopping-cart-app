@@ -3,7 +3,12 @@
   <h2 class="products-title">Products</h2>
 
   <!-- Notification toast -->
-  <div *ngIf="notificationMessage" class="notification-toast" [class.success]="notificationType === 'success'" [class.error]="notificationType === 'error'">
+  <div 
+    *ngIf="notificationMessage" 
+    class="notification-toast"
+    [class.success]="notificationType === 'success'"
+    [class.error]="notificationType === 'error'"
+  >
     {{ notificationMessage }}
   </div>
 
@@ -30,7 +35,11 @@
         <h3 class="product-title">{{ product.title }}</h3>
         <div class="product-details">
           <span class="product-price">${{ product.price | number:'1.2-2' }}</span>
-          <span class="product-stock" [class.in-stock]="isInStock(product)" [class.out-of-stock]="!isInStock(product)">
+          <span 
+            class="product-stock"
+            [class.in-stock]="isInStock(product)"
+            [class.out-of-stock]="!isInStock(product)"
+          >
             {{ isInStock(product) ? 'In Stock' : 'Out of Stock' }}
           </span>
         </div>

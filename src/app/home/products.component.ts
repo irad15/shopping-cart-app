@@ -48,7 +48,15 @@ export class ProductsComponent implements OnInit {
   }
 
   addToCart(product: Product): void {
-    if (!this.isInStock(product) || this.addingToCart[product.id]) return;
+    // Only proceed if the product is in stock
+    if (!this.isInStock(product)) {
+      return;
+    }
+
+    // Prevent duplicate add-to-cart operations for the same product
+    if (this.addingToCart[product.id]) {
+      return;
+    }
 
     this.addingToCart[product.id] = true;
     this.cartService.addToCart(product.id, product.title, product.price, product.image, product.stock).subscribe({

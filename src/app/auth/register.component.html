@@ -45,13 +45,23 @@
           type="password" 
           id="confirmPassword" 
           formControlName="confirmPassword" 
-          [class.error]="(confirmPassword?.invalid && confirmPassword?.touched) || registerForm.errors?.['passwordMismatch']"
+          [class.error]="
+            (confirmPassword?.invalid && confirmPassword?.touched) ||
+            registerForm.errors?.['passwordMismatch']
+          "
           placeholder="Confirm your password"
         />
         <div class="error-message" *ngIf="confirmPassword?.invalid && confirmPassword?.touched">
           <span *ngIf="confirmPassword?.errors?.['required']">Please confirm your password</span>
         </div>
-        <div class="error-message" *ngIf="registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched && password?.touched">
+        <div 
+          class="error-message" 
+          *ngIf="
+            registerForm.errors?.['passwordMismatch'] && 
+            confirmPassword?.touched && 
+            password?.touched
+          "
+        >
           Passwords do not match
         </div>
       </div>
