@@ -17,6 +17,8 @@ export class ProductsComponent implements OnInit {
   isLoading = true;
   error: string | null = null;
   addingToCart: { [productId: number]: boolean } = {};
+  notificationMessage: string | null = null;
+  notificationType: 'success' | 'error' = 'success';
 
   constructor(
     private productsService: ProductsService,
@@ -52,12 +54,21 @@ export class ProductsComponent implements OnInit {
     this.cartService.addToCart(product.id, product.title, product.price, product.image, product.stock).subscribe({
       next: () => {
         this.addingToCart[product.id] = false;
+        this.showNotification(`${product.title} added to cart!`);
       },
       error: () => {
         this.addingToCart[product.id] = false;
-        alert('Not enough in stock');
+        this.showNotification('Not enough in stock', 'error');
       }
     });
+  }
+
+  showNotification(message: string, type: 'success' | 'error' = 'success'): void {
+    this.notificationMessage = message;
+    this.notificationType = type;
+    setTimeout(() => {
+      this.notificationMessage = null;
+    }, 3000);
   }
 }
 

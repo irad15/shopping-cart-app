@@ -6,10 +6,23 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/jpg" sizes="192x192" href="/favicon.jpg" />
+  <style>
+    .corner-logo {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
+  </style>
 
 </head>
 <body>
   <!-- Angular root component mounts here -->
+  <img class="corner-logo" src="/favicon.jpg" alt="Shopping Cart Logo" />
   <app-root></app-root>
 </body>
 </html>

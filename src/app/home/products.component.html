@@ -2,6 +2,11 @@
 <div class="products-container">
   <h2 class="products-title">Products</h2>
 
+  <!-- Notification toast -->
+  <div *ngIf="notificationMessage" class="notification-toast" [class.success]="notificationType === 'success'" [class.error]="notificationType === 'error'">
+    {{ notificationMessage }}
+  </div>
+
   <!-- Loading state -->
   <div *ngIf="isLoading" class="loading-message">
     <p>Loading products...</p>
