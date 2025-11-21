@@ -1,0 +1,27 @@
+{
+  "users": [
+    {
+      "email": "Iradyaacoby@gmail.com9",
+      "password": "Test12"
+    },
+    {
+      "email": "Iradyaacoby@gmail.com92",
+      "password": "Test12"
+    },
+    {
+      "email": "iradyaacoby@gmail.com4",
+      "password": "Test12"
+    }
+  ],
+  "carts": {
+    "Iradyaacoby@gmail.com9": {
+      "items": []
+    },
+    "Iradyaacoby@gmail.com92": {
+      "items": []
+    },
+    "iradyaacoby@gmail.com4": {
+      "items": []
+    }
+  }
+}

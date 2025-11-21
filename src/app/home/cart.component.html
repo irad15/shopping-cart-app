@@ -1,0 +1,58 @@
+<!-- Simple list-style cart view with remove buttons and totals -->
+<div class="cart-container">
+  <h2 class="cart-title">Shopping Cart</h2>
+
+  <!-- Loading state -->
+  <div *ngIf="isLoading" class="loading-message">
+    <p>Loading cart...</p>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="error && !isLoading" class="error-message">
+    <p>{{ error }}</p>
+    <button class="retry-btn" (click)="loadCart()">Retry</button>
+  </div>
+
+  <!-- Cart items list -->
+  <div *ngIf="!isLoading && !error">
+    <!-- Empty cart -->
+    <div *ngIf="cartItems.length === 0" class="empty-cart">
+      <p>Your cart is empty.</p>
+    </div>
+
+    <!-- Cart items -->
+    <div *ngIf="cartItems.length > 0" class="cart-items">
+      <div *ngFor="let item of cartItems" class="cart-item">
+        <div class="cart-item-image">
+          <img [src]="item.image" [alt]="item.title" />
+        </div>
+        
+        <div class="cart-item-details">
+          <h3 class="cart-item-title">{{ item.title }}</h3>
+          <p class="cart-item-price">${{ item.price | number:'1.2-2' }}</p>
+          <p class="cart-item-quantity">Quantity: {{ item.quantity }}</p>
+        </div>
+
+        <div class="cart-item-actions">
+          <button
+            class="remove-btn"
+            [disabled]="removingItem[item.id]"
+            (click)="removeFromCart(item.id)"
+            title="Remove 1 item"
+          >
+            <span *ngIf="!removingItem[item.id]">Remove</span>
+            <span *ngIf="removingItem[item.id]">Removing...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart total -->
+    <div *ngIf="cartItems.length > 0" class="cart-total">
+      <div class="total-line">
+        <span class="total-label">Total:</span>
+        <span class="total-amount">${{ getTotalPrice() | number:'1.2-2' }}</span>
+      </div>
+    </div>
+  </div>
+</div>

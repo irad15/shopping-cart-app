@@ -1,0 +1,48 @@
+<!-- Product grid with stock indicator and add-to-cart buttons -->
+<div class="products-container">
+  <h2 class="products-title">Products</h2>
+
+  <!-- Loading state -->
+  <div *ngIf="isLoading" class="loading-message">
+    <p>Loading products...</p>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="error && !isLoading" class="error-message">
+    <p>{{ error }}</p>
+    <button class="retry-btn" (click)="loadProducts()">Retry</button>
+  </div>
+
+  <!-- Products grid -->
+  <div *ngIf="!isLoading && !error" class="products-grid">
+    <div *ngFor="let product of products" class="product-card">
+      <div class="product-image-container">
+        <img [src]="product.image" [alt]="product.title" class="product-image" />
+        <span *ngIf="!isInStock(product)" class="out-of-stock-badge">Out of Stock</span>
+      </div>
+      
+      <div class="product-info">
+        <h3 class="product-title">{{ product.title }}</h3>
+        <div class="product-details">
+          <span class="product-price">${{ product.price | number:'1.2-2' }}</span>
+          <span class="product-stock" [class.in-stock]="isInStock(product)" [class.out-of-stock]="!isInStock(product)">
+            {{ isInStock(product) ? 'In Stock' : 'Out of Stock' }}
+          </span>
+        </div>
+        <button
+          class="add-to-cart-btn"
+          [disabled]="!isInStock(product) || addingToCart[product.id]"
+          (click)="addToCart(product)"
+        >
+          <span *ngIf="!addingToCart[product.id]">Add to Cart</span>
+          <span *ngIf="addingToCart[product.id]">Adding...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!isLoading && !error && products.length === 0" class="empty-message">
+    <p>No products available at the moment.</p>
+  </div>
+</div>

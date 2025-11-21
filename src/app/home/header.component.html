@@ -1,0 +1,23 @@
+<!-- Primary navigation between products/cart plus logout -->
+<header class="app-header">
+  <nav class="nav-actions">
+    <a 
+      routerLink="/products" 
+      routerLinkActive="active" 
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      Products
+    </a>
+    <a 
+      routerLink="/cart" 
+      routerLinkActive="active" 
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      Cart
+    </a>
+  </nav>
+
+  <button class="logout-btn" type="button" (click)="logout()">
+    Logout
+  </button>
+</header>

@@ -1,0 +1,38 @@
+.home-wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 16px 64px;
+}
+
+.home-hero {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.home-hero .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #4a90e2;
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+
+.home-hero h1 {
+  margin: 0;
+  font-size: 36px;
+  color: #1f1f1f;
+}
+
+.home-hero .description {
+  margin: 12px auto 0;
+  color: #666;
+  max-width: 520px;
+}
+
+.home-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  min-height: 320px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
