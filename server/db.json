@@ -1,35 +1,6 @@
 {
   "users": [
-    {
-      "email": "Iradyaacoby@gmail.com9",
-      "password": "Test12"
-    },
-    {
-      "email": "Iradyaacoby@gmail.com92",
-      "password": "Test12"
-    },
-    {
-      "email": "iradyaacoby@gmail.com4",
-      "password": "Test12"
-    }
   ],
   "carts": {
-    "Iradyaacoby@gmail.com9": {
-      "items": [
-        {
-          "id": 1,
-          "title": "Fjallraven - Foldsack No. 1 Backpack",
-          "price": 109.95,
-          "image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png",
-          "quantity": 1
-        }
-      ]
-    },
-    "Iradyaacoby@gmail.com92": {
-      "items": []
-    },
-    "iradyaacoby@gmail.com4": {
-      "items": []
-    }
   }
 }
