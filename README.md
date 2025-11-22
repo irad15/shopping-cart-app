@@ -142,7 +142,6 @@ shopping-cart-app/
 
 - `npm start` or `ng serve` - Start the development server
 - `npm run build` or `ng build` - Build the project for production
-- `npm test` or `ng test` - Run unit tests
 - `npm run watch` - Build and watch for changes
 
 ### Backend Scripts
@@ -154,14 +153,6 @@ node server.js
 ```
 
 ## Testing
-
-### Unit Tests
-
-Run unit tests using Karma:
-
-```bash
-npm test
-```
 
 ### End-to-End Tests
 
