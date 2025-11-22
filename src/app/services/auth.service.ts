@@ -40,10 +40,12 @@ export class AuthService {
     }
   }
 
+  // Registers a new user with the provided email and password
   register(email: string, password: string): Observable<RegisterResponse> {
     return this.http.post<RegisterResponse>(`${this.apiUrl}/register`, { email, password });
   }
 
+  // Logs in a user and updates login state on success
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http
       .post<LoginResponse>(`${this.apiUrl}/login`, { email, password })
@@ -58,20 +60,24 @@ export class AuthService {
     );
   }
 
+  // Logs out the current user and clears stored session data
   logout(): void {
     this.loggedIn.next(false);
     this.currentUserEmail.next(null);
     localStorage.removeItem('currentUserEmail');
   }
 
+  // Checks if a user is currently logged in
   isLoggedIn(): boolean {
     return this.loggedIn.value;
   }
 
+  // Gets the email address of the currently logged in user
   getCurrentUserEmail(): string | null {
     return this.currentUserEmail.value;
   }
 
+  // Generates HTTP headers with user email for authenticated API requests
   getAuthHeaders(): HttpHeaders {
     const email = this.getCurrentUserEmail();
     

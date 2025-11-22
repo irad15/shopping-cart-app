@@ -25,19 +25,12 @@ export class CartService {
     private authService: AuthService
   ) { }
 
-  /**
-   * Fetches the current user's cart from the server.
-   * @returns Observable of the user's cart
-   */
+  // Fetches the current user's cart from the server
   getCart(): Observable<Cart> {
     return this.http.get<Cart>(`${this.apiUrl}/cart`, { headers: this.authService.getAuthHeaders() });
   }
 
-  /**
-   * Updates the entire cart on the server.
-   * @param cart - The cart object to save
-   * @returns Observable indicating success
-   */
+  // Updates the entire cart on the server
   updateCart(cart: Cart): Observable<{ success: boolean }> {
     const url = `${this.apiUrl}/cart`;
     const body = { cart };
@@ -45,17 +38,7 @@ export class CartService {
     return this.http.post<{ success: boolean }>(url, body, { headers });
   }
 
-  /**
-   * Adds a product to the cart, or increments quantity if already present.
-   * Validates stock availability before adding.
-   * 
-   * @param productId - The product ID to add
-   * @param title - Product title
-   * @param price - Product price
-   * @param image - Product image URL
-   * @param stock - Available stock quantity
-   * @returns Observable indicating success or error
-   */
+  // Adds a product to the cart or increments quantity if already present, with stock validation
   addToCart(
     productId: number,
     title: string,
@@ -91,13 +74,7 @@ export class CartService {
     );
   }
 
-  /**
-   * Removes one unit of a product from the cart.
-   * If quantity reaches 0, the item is completely removed from the cart.
-   * 
-   * @param productId - The product ID to remove
-   * @returns Observable indicating success
-   */
+  // Removes one unit of a product from the cart, or removes the item if quantity reaches 0
   removeFromCart(productId: number): Observable<{ success: boolean }> {
     return this.getCart().pipe(
       switchMap((cart) => {

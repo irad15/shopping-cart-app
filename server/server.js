@@ -85,11 +85,7 @@ app.listen(3000, () => {
   console.log('Test: curl http://localhost:3000/api/debug/db');
 });
 
-
-
-
-
-// for DEBUG: see the whole db.json in your browser (remove later if you want)
+// for DEBUG: see the whole db.json in your browser 
 app.get('/api/debug/db', (req, res) => {
   res.json(readDb());
 });

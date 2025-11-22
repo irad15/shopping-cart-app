@@ -217,3 +217,11 @@ POST /api/cart              - Update user's cart
                               Response: { success: true }
 
 GET  /api/debug/db          - Debug endpoint (view entire db.json)
+
+
+
+
+
+
+
+
