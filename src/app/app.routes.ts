@@ -27,13 +27,13 @@ export const routes: Routes = [
       { path: '', redirectTo: 'products', pathMatch: 'full' },
       {
         path: 'products',
-        loadComponent: () =>
-          import('./home/products.component').then(m => m.ProductsComponent)
+        loadChildren: () =>
+          import('./home/products.module').then(m => m.ProductsModule)
       },
       {
         path: 'cart',
-        loadComponent: () =>
-          import('./home/cart.component').then(m => m.CartComponent)
+        loadChildren: () =>
+          import('./home/cart.module').then(m => m.CartModule)
       }
     ]
   },
