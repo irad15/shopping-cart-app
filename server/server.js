@@ -22,11 +22,18 @@ app.get('/api/products', (req, res) => {
 app.post('/api/register', (req, res) => {
   const db = readDb();
   const { email, password } = req.body;
-  if (db.users.find(u => u.email === email))
+  
+  const existingUser = db.users.find(u => u.email === email);
+  if (existingUser) {
     return res.status(400).json({ error: 'User already exists' });
+  }
 
   db.users.push({ email, password });
-  if (!db.carts[email]) db.carts[email] = { items: [] };
+  
+  if (!db.carts[email]) {
+    db.carts[email] = { items: [] };
+  }
+  
   writeDb(db);
   res.json({ success: true, email });
 });
@@ -36,7 +43,10 @@ app.post('/api/login', (req, res) => {
   const db = readDb();
   const { email, password } = req.body;
   const user = db.users.find(u => u.email === email && u.password === password);
-  if (!user) return res.status(401).json({ error: 'Invalid email or password' });
+  
+  if (!user) {
+    return res.status(401).json({ error: 'Invalid email or password' });
+  }
 
   res.json({ success: true, email });
 });
@@ -44,19 +54,27 @@ app.post('/api/login', (req, res) => {
 // GET cart
 app.get('/api/cart', (req, res) => {
   const email = req.headers['x-user-email'] || req.query.email;
-  if (!email) return res.status(401).json({ error: 'No user email provided' });
+  
+  if (!email) {
+    return res.status(401).json({ error: 'No user email provided' });
+  }
 
   const db = readDb();
-  res.json(db.carts[email] || { items: [] });
+  const userCart = db.carts[email] || { items: [] };
+  res.json(userCart);
 });
 
 // UPDATE cart
 app.post('/api/cart', (req, res) => {
   const email = req.headers['x-user-email'] || req.body.email;
-  if (!email) return res.status(401).json({ error: 'No user email provided' });
+  
+  if (!email) {
+    return res.status(401).json({ error: 'No user email provided' });
+  }
 
   const db = readDb();
-  db.carts[email] = req.body.cart || req.body;
+  const cartData = req.body.cart || req.body;
+  db.carts[email] = cartData;
   writeDb(db);
   res.json({ success: true });
 });

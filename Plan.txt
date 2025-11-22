@@ -1,17 +1,13 @@
 shopping-cart-app/
 ├── e2e/                                      # End-to-end tests folder (Playwright)
-│   ├── cart-persistence.spec.ts              # E2E test: Cart persistence
-│   │                                         # Tests: Cart survives page refresh, logout/login,
-│   │                                         # navigation between pages
-│   ├── registration-login-cart.spec.ts       # E2E test: Full user journey
-│   │                                         # Tests: Registration → Login → Add to cart → View cart
-│   └── validation.spec.ts                    # E2E test: Form validation
-│                                             # Tests: Email validation, password requirements,
-│                                             # password confirmation matching, error messages
+│   └── user-journey.spec.ts                  # E2E test: Complete user journey
+│                                             # Tests: Registration → Login → Add to cart → 
+│                                             # View cart → Remove items → Logout → Login → 
+│                                             # Cart persistence, form validation
 │
 ├── public/                                   # Static assets folder
 │   │                                         # Purpose: Contains files that are copied as-is to build output
-│   └── favicon.ico                           # Browser favicon (icon shown in browser tab)
+│   └── favicon.jpg                           # Browser favicon (icon shown in browser tab)
 │
 ├── server/                                   # Backend API server (Node.js/Express)
 │   │                                         # This folder contains the REST API that handles:
@@ -44,6 +40,7 @@ shopping-cart-app/
 │   │   │   ├── login.component.ts            # Login component - handles user login form
 │   │   │   │                                  # Features: email/password input, form validation,
 │   │   │   │                                  # error message display, loading states, redirect handling
+│   │   │   │                                  # Supports returnUrl query parameter for post-login redirect
 │   │   │   ├── register.component.css        # Registration component styles
 │   │   │   ├── register.component.html       # Registration form template (email, password, confirm password)
 │   │   │   └── register.component.ts         # Registration component - handles new user signup
@@ -51,21 +48,17 @@ shopping-cart-app/
 │   │   │                                      # password must have capital letter, confirm password match),
 │   │   │                                      # auto-login after registration, error handling
 │   │   │
-│   │   ├── config/                           # Configuration files
-│   │   │   └── api.config.ts                 # Centralized API configuration
-│   │   │                                     # Purpose: Single source of truth for API base URL
-│   │   │                                     # Eliminates duplication across services
-│   │   │
 │   │   ├── guards/                           # Route guards - protect routes from unauthorized access
 │   │   │   └── auth.guard.ts                 # Authentication guard
 │   │   │                                     # Purpose: Protects all routes under home
 │   │   │                                     # Redirects to /login if user is not authenticated
 │   │   │                                     # Uses AuthService to check login status
+│   │   │                                     # Preserves returnUrl in query params for post-login redirect
 │   │   │
 │   │   ├── home/                             # Main application area (protected routes)
 │   │   │   ├── cart.component.css            # Cart component styles - list layout, responsive design
-│   │   │   ├── cart.component.html           # Cart list template - displays cart items as a list (not cards)
-│   │   │   ├── cart.component.ts             # Shopping cart page component - LAZY LOADED #2
+│   │   │   ├── cart.component.html           # Cart list template - displays cart items as a list
+│   │   │   ├── cart.component.ts             # Shopping cart page component - LAZY LOADED
 │   │   │   │                                 # Features: Display user's cart items (image, name, price, quantity),
 │   │   │   │                                 # Remove button (decreases quantity by 1, removes item if qty=0),
 │   │   │   │                                 # Calculate and display total price,
@@ -80,15 +73,17 @@ shopping-cart-app/
 │   │   │   ├── home.component.ts             # Home shell component - main layout wrapper
 │   │   │   │                                 # Features: Contains <app-header> and <router-outlet>
 │   │   │   │                                 # Acts as a container for products and cart pages
+│   │   │   │                                 # Protected by authGuard
 │   │   │   ├── products.component.css        # Products component styles - grid layout, responsive cards
 │   │   │   ├── products.component.html       # Products grid template - product cards with images
-│   │   │   └── products.component.ts         # Products page component - LAZY LOADED #1
+│   │   │   └── products.component.ts         # Products page component - LAZY LOADED
 │   │   │                                     # Features: Product grid display with images, titles, prices,
 │   │   │                                     # Stock status indicators, Add to cart button,
 │   │   │                                     # Out of stock badge and disabled state,
 │   │   │                                     # Stock validation (prevents adding more than available),
 │   │   │                                     # Error messages for stock issues,
-│   │   │                                     # Loading and error states, empty state
+│   │   │                                     # Loading and error states, empty state,
+│   │   │                                     # Success/error notifications
 │   │   │
 │   │   ├── models/                           # TypeScript interfaces and models
 │   │   │   └── product.models.ts             # Shared product-related interfaces
@@ -103,35 +98,32 @@ shopping-cart-app/
 │   │   │   │                                 # getCurrentUserEmail(), getAuthHeaders()
 │   │   │   │                                 # Features: Manages login state with BehaviorSubject,
 │   │   │   │                                 # Persists login state in localStorage,
-│   │   │   │                                 # Provides observables for reactive login state,
+│   │   │   │                                 # Restores session on service initialization,
 │   │   │   │                                 # Generates auth headers for cart API calls
-│   │   │   ├── cart.service.ts               # Shopping cart service
+│   │   │   ├── cart.service.ts              # Shopping cart service
 │   │   │   │                                 # Methods: getCart(), updateCart(), addToCart(), removeFromCart()
 │   │   │   │                                 # Features: Manages cart operations with server API,
 │   │   │   │                                 # Stock validation before adding to cart,
 │   │   │   │                                 # Quantity management (increment/decrement),
-│   │   │   │                                 # Automatic authentication checks
-│   │   │   └── products.service.ts           # Products service
+│   │   │   │                                 # Automatic authentication checks via headers
+│   │   │   └── products.service.ts          # Products service
 │   │   │                                     # Methods: getProducts()
 │   │   │                                     # Purpose: Fetches product catalog from server API
 │   │   │
-│   │   ├── utils/                            # Utility functions - shared helper code
-│   │   │   ├── error.utils.ts                # Error handling utilities
-│   │   │   │                                 # extractErrorMessage() - extracts error messages from various formats
-│   │   │   │                                 # normalizeStockError() - normalizes stock-related error messages
-│   │   │   │                                 # Purpose: Centralized error handling logic
-│   │   │   └── form.utils.ts                 # Form validation utilities
-│   │   │                                     # markFormGroupTouched() - marks all form controls as touched
-│   │   │                                     # Purpose: Shared form validation helper used by login/register
-│   │   │
 │   │   ├── app.component.html                # Root template - just contains <router-outlet></router-outlet>
 │   │   ├── app.component.ts                  # Root component - main app component
-│   │   ├── app.config.ts                     # Application configuration (HttpClient, Router providers)
+│   │   │                                     # Purpose: Bootstraps the Angular application
+│   │   ├── app.config.ts                     # Application configuration
+│   │   │                                     # Providers: Router, HttpClient, Zone.js, Error Listeners
 │   │   └── app.routes.ts                     # Application routing configuration
 │   │                                         # Routes: /login, /register (public)
-│   │                                         # Routes: / (protected, lazy loads products), /cart (protected, lazy loaded)
+│   │                                         # Routes: / (protected shell with HomeComponent)
+│   │                                         #   - /products (lazy loaded)
+│   │                                         #   - /cart (lazy loaded)
 │   │                                         # Uses authGuard for protected routes
 │   │                                         # Uses lazy loading for products and cart components
+│   │                                         # Default redirect: / -> /products
+│   │                                         # Catch-all: redirects based on auth status
 │   │
 │   ├── index.html                            # Main HTML file - entry point
 │   ├── main.ts                               # Application entry point - bootstraps Angular app
@@ -144,7 +136,7 @@ shopping-cart-app/
 ├── playwright.config.ts                      # Playwright test configuration
 ├── README.md                                 # Project documentation
 ├── tsconfig.app.json                         # TypeScript configuration for application
-├── tsconfig.json                             # TypeScript base configuration
+├── tsconfig.json                              # TypeScript base configuration
 └── tsconfig.spec.json                        # TypeScript configuration for tests
 
 
@@ -159,40 +151,45 @@ Backend (server/):
 - Cart authentication via x-user-email HTTP header
 
 Frontend (src/):
-- Angular 18+ standalone components
+- Angular 20.3 standalone components
 - Lazy loading for products and cart components
 - Route guards for authentication protection
 - Reactive forms for user input
 - Services for API communication and state management
-- Shared utilities for error handling and form validation
-- Centralized configuration for API endpoints
+- HomeComponent acts as protected shell with header and router-outlet
+- Child routes (products, cart) are lazy-loaded within the shell
 
 Key Features Implemented:
 1. User Authentication:
    - Registration with full validation (email, password strength, password confirmation)
-   - Login with error handling
+   - Login with error handling and returnUrl support
    - Persistent login state (localStorage)
    - Route protection with auth guard
+   - Session restoration on app initialization
 
 2. Product Catalog:
    - Product grid display with images
-   - Stock status indicators
+   - Stock status indicators (In Stock / Out of Stock)
    - Real-time stock validation
    - Add to cart functionality with stock checks
+   - Success/error notifications
+   - Loading and error states
 
 3. Shopping Cart:
-   - List view of cart items (not card-based)
-   - Quantity management (increase/decrease)
+   - List view of cart items
+   - Quantity management (decrease by 1 per remove action)
    - Remove items (decreases quantity by 1, removes when qty=0)
    - Total price calculation
    - Loading and error states
+   - Empty cart message
+   - Cart persistence across login sessions
 
 4. Code Quality:
-   - DRY principles - no duplicate code
-   - Shared utilities for common operations
-   - Centralized configuration
+   - Comprehensive JSDoc comments throughout
    - Type-safe interfaces
    - Consistent error handling
+   - Clean separation of concerns
+   - No unused code or imports
 
 
 ================================================================================
@@ -220,34 +217,3 @@ POST /api/cart              - Update user's cart
                               Response: { success: true }
 
 GET  /api/debug/db          - Debug endpoint (view entire db.json)
-
-
-================================================================================
-DEVELOPMENT STATUS
-================================================================================
-
-✅ COMPLETED:
-1. Backend server setup (Express, JSON storage, API endpoints)
-2. Global styles and project cleanup
-3. Routing with lazy loading for products and cart components
-4. Authentication service with state management
-5. Cart service with stock validation
-6. Products service for catalog management
-7. Authentication guard for route protection
-8. Registration page with full validation
-9. Login page with error handling
-10. Home shell component with header navigation
-11. Products page with grid display, stock validation, add to cart
-12. Cart page with list view, quantity management, total calculation
-13. Code refactoring - eliminated duplication:
-    - Centralized API configuration
-    - Shared error handling utilities
-    - Shared form validation utilities
-    - Simplified service methods
-    - Type-safe models/interfaces
-14. Stock validation - prevents adding more than available stock
-15. Cart quantity management - remove button decreases by 1
-
-📋 REMAINING:
-- Playwright E2E tests (if needed for bonus points)
-- Final testing and polish (as needed)

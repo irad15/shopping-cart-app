@@ -84,7 +84,13 @@ export class ProductsComponent implements OnInit {
     }
 
     this.addingToCart[product.id] = true;
-    this.cartService.addToCart(product.id, product.title, product.price, product.image, product.stock).subscribe({
+    this.cartService.addToCart(
+      product.id,
+      product.title,
+      product.price,
+      product.image,
+      product.stock
+    ).subscribe({
       next: () => {
         this.addingToCart[product.id] = false;
         this.showNotification(`${product.title} added to cart!`);

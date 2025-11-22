@@ -37,28 +37,37 @@ export class LoginComponent {
       password: ['', [Validators.required]]
     });
 
-    this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
+    const returnUrlParam = this.route.snapshot.queryParamMap.get('returnUrl');
+    this.returnUrl = returnUrlParam || '/';
   }
 
   onSubmit() {
-    if (this.loginForm.invalid) return;
-
+    if (this.loginForm.invalid) {
+      return;
+    }
+  
     this.isLoading = true;
     this.errorMessage = '';
+  
     const { email, password } = this.loginForm.value;
-
-    this.authService.login(email, password).subscribe({
+  
+    this.authService.login(email!, password!).subscribe({
       next: (response) => {
         this.isLoading = false;
         if (response.success) {
-          this.router.navigateByUrl(this.returnUrl);
+          // Redirect to the original URL (or home if none)
+          const redirectTo = this.returnUrl || '/';
+          this.router.navigateByUrl(redirectTo);
         } else {
-          this.errorMessage = 'Login failed';
+          // This should never happen with your current backend,
+          // but kept for safety
+          this.errorMessage = 'Login failed. Please try again.';
         }
       },
-      error: () => {
+      error: (err) => {
         this.isLoading = false;
-        this.errorMessage = 'Login failed';
+        // This is the key line — show the real server message
+        this.errorMessage = err.error?.error || 'Login failed. Please try again.';
       }
     });
   }

@@ -66,7 +66,7 @@ export class CartService {
     return this.getCart().pipe(
       switchMap((cart) => {
         const item = cart.items.find(i => i.id === productId);
-        const currentQuantity = item?.quantity || 0;
+        const currentQuantity = item?.quantity ?? 0;
 
         // Validate stock availability
         if (currentQuantity + 1 > stock) {
@@ -77,7 +77,13 @@ export class CartService {
         if (item) {
           item.quantity += 1;
         } else {
-          cart.items.push({ id: productId, title, price, image, quantity: 1 });
+          cart.items.push({
+            id: productId,
+            title,
+            price,
+            image,
+            quantity: 1
+          });
         }
 
         return this.updateCart(cart);

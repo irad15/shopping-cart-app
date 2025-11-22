@@ -59,7 +59,9 @@ export class CartComponent implements OnInit {
    * @param productId - The product ID to remove
    */
   removeFromCart(productId: number): void {
-    if (this.removingItem[productId]) return;
+    if (this.removingItem[productId]) {
+      return;
+    }
 
     this.removingItem[productId] = true;
     this.cartService.removeFromCart(productId).subscribe({

@@ -44,7 +44,10 @@ export class RegisterComponent {
    * @returns Validation error object if invalid, null if valid
    */
   passwordCapitalValidator(control: any) {
-    if (!control.value) return null;
+    if (!control.value) {
+      return null;
+    }
+    
     const hasCapital = /[A-Z]/.test(control.value);
     return hasCapital ? null : { noCapital: true };
   }
@@ -58,13 +61,17 @@ export class RegisterComponent {
     const password = form.get('password');
     const confirmPassword = form.get('confirmPassword');
     
-    if (!password || !confirmPassword) return null;
+    if (!password || !confirmPassword) {
+      return null;
+    }
     
     return password.value === confirmPassword.value ? null : { passwordMismatch: true };
   }
 
   onSubmit() {
-    if (this.registerForm.invalid) return;
+    if (this.registerForm.invalid) {
+      return;
+    }
   
     this.isLoading = true;
     this.errorMessage = '';
@@ -74,14 +81,24 @@ export class RegisterComponent {
       next: (response) => {
         if (response.success) {
           this.authService.login(email, password).subscribe({
-            next: () => this.router.navigate(['/']),
-            error: () => this.router.navigate(['/login'])
+            next: () => {
+              this.router.navigate(['/']);
+            },
+            error: () => {
+              this.router.navigate(['/login']);
+            }
           });
+        } else if (response.error) {
+          // Handle error message from successful HTTP response
+          this.isLoading = false;
+          this.errorMessage = response.error;
         }
       },
-      error: () => {
+      error: (error) => {
         this.isLoading = false;
-        this.errorMessage = 'Registration failed';
+        // Extract error message from HTTP error response
+        const errorMessage = error?.error?.error || 'Registration failed';
+        this.errorMessage = errorMessage;
       }
     });
   }

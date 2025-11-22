@@ -74,6 +74,11 @@ export class AuthService {
 
   getAuthHeaders(): HttpHeaders {
     const email = this.getCurrentUserEmail();
-    return email ? new HttpHeaders({ 'x-user-email': email }) : new HttpHeaders();
+    
+    if (email) {
+      return new HttpHeaders({ 'x-user-email': email });
+    }
+    
+    return new HttpHeaders();
   }
 }
