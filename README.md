@@ -186,7 +186,6 @@ The backend server provides the following REST API endpoints:
 - **Angular 20.3** - Frontend framework
 - **TypeScript** - Programming language
 - **RxJS** - Reactive programming
-- **Tailwind CSS** (via @ngneat/tailwind) - Styling
 - **Playwright** - E2E testing
 
 ### Backend
