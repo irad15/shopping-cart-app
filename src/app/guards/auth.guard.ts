@@ -1,12 +1,17 @@
-// src/app/guards/auth.guard.ts
-
 import { inject } from '@angular/core';
-import { CanActivateFn, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-// Blocks navigation unless the user is logged in; redirects to /login otherwise.
+/**
+ * Route guard that protects routes requiring authentication.
+ * 
+ * Behavior:
+ * - Allows navigation if user is logged in
+ * - Redirects to /login with returnUrl query parameter if user is not logged in
+ * - The returnUrl allows users to return to their intended destination after login
+ */
 export const authGuard: CanActivateFn = (
-  route: ActivatedRouteSnapshot,
+  _route,
   state: RouterStateSnapshot
 ) => {
   const authService = inject(AuthService);
@@ -16,7 +21,7 @@ export const authGuard: CanActivateFn = (
     return true;
   }
 
-  // This line is the key: return the navigation observable
+  // Redirect to login with returnUrl so user can return to intended page after login
   return router.createUrlTree(['/login'], { 
     queryParams: { returnUrl: state.url } 
   });

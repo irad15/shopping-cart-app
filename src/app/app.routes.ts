@@ -1,12 +1,18 @@
-// src/app/app.routes.ts  ← final perfect version
-
 import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login.component';
 import { RegisterComponent } from './auth/register.component';
 import { HomeComponent } from './home/home.component';
 import { authGuard } from './guards/auth.guard';
 
-// Route map: public auth pages plus guarded shell that lazy-loads features.
+/**
+ * Application route configuration.
+ * 
+ * Structure:
+ * - Public routes: /login, /register (no authentication required)
+ * - Protected routes: /products, /cart (require authentication via authGuard)
+ * - Default redirect: / -> /products
+ * - Catch-all: redirects to home (or login if not authenticated)
+ */
 export const routes: Routes = [
   // Public routes
   { path: 'login', component: LoginComponent },

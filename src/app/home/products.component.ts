@@ -4,7 +4,17 @@ import { ProductsService } from '../services/products.service';
 import { CartService } from '../services/cart.service';
 import { Product } from '../models/product.models';
 
-// Lists products and wires up add-to-cart actions.
+/**
+ * Products component that displays the product catalog.
+ * 
+ * Features:
+ * - Displays all available products in a grid layout
+ * - Shows stock status (In Stock / Out of Stock)
+ * - Add to cart functionality with stock validation
+ * - Loading and error states
+ * - Success/error notifications
+ * - Prevents duplicate add-to-cart operations
+ */
 @Component({
   selector: 'app-products',
   standalone: true,
@@ -29,6 +39,10 @@ export class ProductsComponent implements OnInit {
     this.loadProducts();
   }
 
+  /**
+   * Loads products from the server.
+   * Handles loading state and error scenarios.
+   */
   loadProducts(): void {
     this.isLoading = true;
     this.productsService.getProducts().subscribe({
@@ -43,10 +57,21 @@ export class ProductsComponent implements OnInit {
     });
   }
 
+  /**
+   * Checks if a product is in stock.
+   * @param product - The product to check
+   * @returns true if stock > 0, false otherwise
+   */
   isInStock(product: Product): boolean {
     return product.stock > 0;
   }
 
+  /**
+   * Adds a product to the cart.
+   * Validates stock availability and prevents duplicate operations.
+   * 
+   * @param product - The product to add to cart
+   */
   addToCart(product: Product): void {
     // Only proceed if the product is in stock
     if (!this.isInStock(product)) {
@@ -71,6 +96,13 @@ export class ProductsComponent implements OnInit {
     });
   }
 
+  /**
+   * Displays a temporary notification message.
+   * Automatically clears after 3 seconds.
+   * 
+   * @param message - The message to display
+   * @param type - Notification type: 'success' or 'error'
+   */
   showNotification(message: string, type: 'success' | 'error' = 'success'): void {
     this.notificationMessage = message;
     this.notificationType = type;

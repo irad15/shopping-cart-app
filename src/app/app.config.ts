@@ -4,7 +4,15 @@ import { provideHttpClient } from '@angular/common/http';
 
 import { routes } from './app.routes';
 
-// Global application providers (router, http client, and runtime tweaks).
+/**
+ * Application configuration that sets up global providers.
+ * 
+ * Providers:
+ * - Router: Enables Angular routing
+ * - HTTP Client: Enables HTTP requests to the API
+ * - Zone.js: Angular change detection with event coalescing for better performance
+ * - Error Listeners: Global error handling
+ */
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),

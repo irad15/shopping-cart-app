@@ -1,13 +1,19 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header.component';
 
-// Auth-protected shell that shows the header and child routes (products/cart).
+/**
+ * Home component that serves as the authenticated shell for the application.
+ * 
+ * This component:
+ * - Displays the header navigation
+ * - Hosts child routes (products, cart) via router-outlet
+ * - Protected by authGuard (only accessible when logged in)
+ */
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, RouterOutlet],
+  imports: [HeaderComponent, RouterOutlet],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

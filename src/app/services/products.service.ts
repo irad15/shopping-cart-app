@@ -3,7 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product } from '../models/product.models';
 
-// Simple data access layer for fetching catalog products.
+/**
+ * Products service that provides access to the product catalog.
+ * 
+ * Responsibilities:
+ * - Fetch all available products from the server
+ * - Products include: id, title, price, image, and stock information
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -12,6 +18,10 @@ export class ProductsService {
 
   constructor(private http: HttpClient) { }
 
+  /**
+   * Fetches all available products from the server.
+   * @returns Observable of product array
+   */
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.apiUrl}/products`);
   }

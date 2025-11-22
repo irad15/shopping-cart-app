@@ -4,7 +4,16 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-// Handles the registration form, including client-side password checks.
+/**
+ * Registration component that handles new user account creation.
+ * 
+ * Features:
+ * - Email validation (required, valid email format)
+ * - Password validation (minimum 6 characters, must contain capital letter)
+ * - Password confirmation matching
+ * - Automatic login after successful registration
+ * - Redirects to products page on success
+ */
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -29,14 +38,22 @@ export class RegisterComponent {
     }, { validators: this.passwordMatchValidator });
   }
 
-  // Custom validator: password must contain at least one capital letter
+  /**
+   * Custom validator: password must contain at least one capital letter.
+   * @param control - The form control to validate
+   * @returns Validation error object if invalid, null if valid
+   */
   passwordCapitalValidator(control: any) {
     if (!control.value) return null;
     const hasCapital = /[A-Z]/.test(control.value);
     return hasCapital ? null : { noCapital: true };
   }
 
-  // Custom validator: passwords must match
+  /**
+   * Custom validator: passwords must match.
+   * @param form - The form group containing password and confirmPassword fields
+   * @returns Validation error object if passwords don't match, null if they match
+   */
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password');
     const confirmPassword = form.get('confirmPassword');

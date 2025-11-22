@@ -1,14 +1,22 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-// Handles the login form UI, validation, and submission flow.
+/**
+ * Login component that handles user authentication.
+ * 
+ * Features:
+ * - Email and password validation
+ * - Server-side authentication via AuthService
+ * - Redirects to returnUrl after successful login (if provided)
+ * - Displays error messages for failed login attempts
+ */
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, NgIf, RouterModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

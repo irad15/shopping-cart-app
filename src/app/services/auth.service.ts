@@ -14,7 +14,15 @@ export interface LoginResponse {
   error?: string;
 }
 
-// Handles login/registration state and exposes helpers for guarded requests.
+/**
+ * Authentication service that manages user login state and session persistence.
+ * 
+ * Responsibilities:
+ * - User registration and login
+ * - Session management via localStorage
+ * - Providing authentication headers for API requests
+ * - Exposing login state for route guards
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -23,10 +31,8 @@ export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
   private currentUserEmail = new BehaviorSubject<string | null>(null);
 
-  isLoggedIn$ = this.loggedIn.asObservable();
-  currentUserEmail$ = this.currentUserEmail.asObservable();
-
   constructor(private http: HttpClient) {
+    // Restore session from localStorage on service initialization
     const savedEmail = localStorage.getItem('currentUserEmail');
     if (savedEmail) {
       this.loggedIn.next(true);
