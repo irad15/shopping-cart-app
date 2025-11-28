@@ -1,7 +1,9 @@
+// Angular core & HTTP
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
 
+// Response shapes from backend
 export interface RegisterResponse {
   success: boolean;
   email: string;
@@ -15,24 +17,20 @@ export interface LoginResponse {
 }
 
 /**
- * Authentication service that manages user login state and session persistence.
- * 
- * Responsibilities:
- * - User registration and login
- * - Session management via localStorage
- * - Providing authentication headers for API requests
- * - Exposing login state for route guards
+ * Central authentication service – singleton, manages login state for the entire app
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root'                  // One instance shared across whole app
 })
 export class AuthService {
   private apiUrl = 'http://localhost:3000/api';
+
+  // Observable streams that broadcast login state to any subscriber
   private loggedIn = new BehaviorSubject<boolean>(false);
   private currentUserEmail = new BehaviorSubject<string | null>(null);
 
   constructor(private http: HttpClient) {
-    // Restore session from localStorage on service initialization
+    // Restore previous session on app startup
     const savedEmail = localStorage.getItem('currentUserEmail');
     if (savedEmail) {
       this.loggedIn.next(true);
@@ -40,51 +38,46 @@ export class AuthService {
     }
   }
 
-  // Registers a new user with the provided email and password
+  // Register new user – just forwards to backend
   register(email: string, password: string): Observable<RegisterResponse> {
     return this.http.post<RegisterResponse>(`${this.apiUrl}/register`, { email, password });
   }
 
-  // Logs in a user and updates login state on success
+  // Login user and update global state on success
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http
       .post<LoginResponse>(`${this.apiUrl}/login`, { email, password })
       .pipe(
-      tap(response => {
-        if (response.success) {
-          this.loggedIn.next(true);
-          this.currentUserEmail.next(email);
-          localStorage.setItem('currentUserEmail', email);
-        }
-      })
-    );
+        tap(response => {
+          if (response.success) {
+            this.loggedIn.next(true);
+            this.currentUserEmail.next(email);
+            localStorage.setItem('currentUserEmail', email);   // persist session
+          }
+        })
+      );
   }
 
-  // Logs out the current user and clears stored session data
+  // Clear login state and localStorage
   logout(): void {
     this.loggedIn.next(false);
     this.currentUserEmail.next(null);
     localStorage.removeItem('currentUserEmail');
   }
 
-  // Checks if a user is currently logged in
+  // Simple getter used by AuthGuard
   isLoggedIn(): boolean {
     return this.loggedIn.value;
   }
 
-  // Gets the email address of the currently logged in user
+  // Current user's email (or null)
   getCurrentUserEmail(): string | null {
     return this.currentUserEmail.value;
   }
 
-  // Generates HTTP headers with user email for authenticated API requests
+  // Creates header used by CartService to identify user on backend
   getAuthHeaders(): HttpHeaders {
     const email = this.getCurrentUserEmail();
-    
-    if (email) {
-      return new HttpHeaders({ 'x-user-email': email });
-    }
-    
-    return new HttpHeaders();
+    return email ? new HttpHeaders({ 'x-user-email': email }) : new HttpHeaders();
   }
 }
