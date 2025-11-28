@@ -38,11 +38,7 @@ export class RegisterComponent {
     }, { validators: this.passwordMatchValidator });
   }
 
-  /**
-   * Custom validator: password must contain at least one capital letter.
-   * @param control - The form control to validate
-   * @returns Validation error object if invalid, null if valid
-   */
+  // Validates that password contains at least one capital letter
   passwordCapitalValidator(control: any) {
     if (!control.value) {
       return null;
@@ -52,11 +48,7 @@ export class RegisterComponent {
     return hasCapital ? null : { noCapital: true };
   }
 
-  /**
-   * Custom validator: passwords must match.
-   * @param form - The form group containing password and confirmPassword fields
-   * @returns Validation error object if passwords don't match, null if they match
-   */
+  // Validates that password and confirmPassword fields match
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password');
     const confirmPassword = form.get('confirmPassword');
@@ -68,6 +60,7 @@ export class RegisterComponent {
     return password.value === confirmPassword.value ? null : { passwordMismatch: true };
   }
 
+  // Handles form submission, registers user and logs them in on success
   onSubmit() {
     if (this.registerForm.invalid) {
       return;
@@ -102,8 +95,11 @@ export class RegisterComponent {
       }
     });
   }
+  // Getter for email form control
   get email() { return this.registerForm.get('email'); }
+  // Getter for password form control
   get password() { return this.registerForm.get('password'); }
+  // Getter for confirmPassword form control
   get confirmPassword() { return this.registerForm.get('confirmPassword'); }
 }
 

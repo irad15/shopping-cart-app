@@ -63,6 +63,10 @@ shopping-cart-app/
 │   │   │   │                                 # Remove button (decreases quantity by 1, removes item if qty=0),
 │   │   │   │                                 # Calculate and display total price,
 │   │   │   │                                 # Loading and error states, empty cart message
+│   │   │   ├── cart.module.ts                # Cart lazy loading module
+│   │   │   │                                 # Purpose: NgModule that configures lazy-loaded routes for CartComponent
+│   │   │   │                                 # Registers route path: '' -> CartComponent
+│   │   │   │                                 # Used with loadChildren in app.routes.ts for code splitting
 │   │   │   ├── header.component.css          # Header component styles
 │   │   │   ├── header.component.html         # Header template (Products link, Cart link, Logout button)
 │   │   │   ├── header.component.ts           # Header component - navigation bar
@@ -76,7 +80,7 @@ shopping-cart-app/
 │   │   │   │                                 # Protected by authGuard
 │   │   │   ├── products.component.css        # Products component styles - grid layout, responsive cards
 │   │   │   ├── products.component.html       # Products grid template - product cards with images
-│   │   │   └── products.component.ts         # Products page component - LAZY LOADED
+│   │   │   ├── products.component.ts         # Products page component - LAZY LOADED
 │   │   │                                     # Features: Product grid display with images, titles, prices,
 │   │   │                                     # Stock status indicators, Add to cart button,
 │   │   │                                     # Out of stock badge and disabled state,
@@ -84,6 +88,10 @@ shopping-cart-app/
 │   │   │                                     # Error messages for stock issues,
 │   │   │                                     # Loading and error states, empty state,
 │   │   │                                     # Success/error notifications
+│   │   │   └── products.module.ts            # Products lazy loading module
+│   │   │                                     # Purpose: NgModule that configures lazy-loaded routes for ProductsComponent
+│   │   │                                     # Registers route path: '' -> ProductsComponent
+│   │   │                                     # Used with loadChildren in app.routes.ts for code splitting
 │   │   │
 │   │   ├── models/                           # TypeScript interfaces and models
 │   │   │   └── product.models.ts             # Shared product-related interfaces
