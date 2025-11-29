@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
+// Express server must have CORS enabled to allow Angular to talk to it
 app.use(cors());                    // Allow Angular (4200) to talk to this server
 app.use(express.json());            // Automatically parse JSON bodies
 

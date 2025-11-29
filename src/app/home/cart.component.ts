@@ -59,29 +59,33 @@ export class CartComponent implements OnInit {
    * @param productId - The product ID to remove
    */
   removeFromCart(productId: number): void {
+    // Prevent multiple simultaneous remove requests for the same product
     if (this.removingItem[productId]) {
-      return;
+      return; // Already removing this item → ignore extra clicks
     }
-
+  
+    // Set flag to block any further clicks while request is in progress
     this.removingItem[productId] = true;
+  
     this.cartService.removeFromCart(productId).subscribe({
       next: (response) => {
-        this.removingItem[productId] = false;
+        this.removingItem[productId] = false; // Always reset the flag
+  
         if (response.success) {
-          // Update local state: decrement quantity or remove item if quantity reaches 0
+          // Update the local cart UI to reflect the server change
           const item = this.cartItems.find(i => i.id === productId);
           if (item) {
-            item.quantity -= 1;
+            item.quantity -= 1;                    // Decrease quantity by 1
             if (item.quantity <= 0) {
-              // Remove item completely if quantity is zero or less
-              this.cartItems = this.cartItems.filter(item => item.id !== productId);
+              // If quantity reached 0 → completely remove the row from the cart
+              this.cartItems = this.cartItems.filter(i => i.id !== productId);
             }
           }
         }
       },
       error: () => {
-        this.removingItem[productId] = false;
-        // Reload cart on error to ensure consistency
+        this.removingItem[productId] = false; // Critical: reset even if server failed
+        // Server failed → reload fresh data to stay in sync with backend
         this.loadCart();
       }
     });

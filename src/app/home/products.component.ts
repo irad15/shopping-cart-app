@@ -35,6 +35,8 @@ export class ProductsComponent implements OnInit {
     private cartService: CartService
   ) { }
 
+  // A special method that Angular itself knows about and calls automatically.
+  // Runs when the page loads → calls loadProducts()
   ngOnInit(): void {
     this.loadProducts();
   }
