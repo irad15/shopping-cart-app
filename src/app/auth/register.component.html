@@ -16,6 +16,7 @@
           placeholder="Enter your email"
         />
         <div class="error-message" *ngIf="email?.invalid && email?.touched">
+          <!-- shows the correct error based on the validator we failed at (required or email) -->
           <span *ngIf="email?.errors?.['required']">Email is required</span>
           <span *ngIf="email?.errors?.['email']">Please enter a valid email address</span>
         </div>

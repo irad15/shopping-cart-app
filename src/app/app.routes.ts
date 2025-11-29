@@ -38,7 +38,9 @@ export const routes: Routes = [
     ]
   },
 
-  // SMART CATCH-ALL: If logged in → go home, if not → go login
+  // Catch-all for any unknown route:
+  // - If user is logged in → redirect to home page
+  // - If not logged in → authGuard redirects to /login with returnUrl
   {
     path: '**',
     canActivate: [authGuard],

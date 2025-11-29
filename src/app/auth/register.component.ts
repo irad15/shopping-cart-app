@@ -35,7 +35,9 @@ export class RegisterComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6), this.passwordCapitalValidator]],
       confirmPassword: ['', [Validators.required]]
-    }, { validators: this.passwordMatchValidator });
+    }, 
+    // this validation is on the whole form and not a specific field:
+    { validators: this.passwordMatchValidator }); 
   }
 
   // Validates that password contains at least one capital letter

@@ -30,7 +30,7 @@ export class LoginComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute // used to save the initial fail to access /cart in URL
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -59,7 +59,7 @@ export class LoginComponent {
           const redirectTo = this.returnUrl || '/';
           this.router.navigateByUrl(redirectTo);
         } else {
-          // This should never happen with your current backend,
+          // This shosuld never happen with my current backend,
           // but kept for safety
           this.errorMessage = 'Login failed. Please try again.';
         }
